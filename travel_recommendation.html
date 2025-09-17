@@ -1,0 +1,784 @@
+<html>
+	<head>
+			<title>Travel Recommendation Website</title>
+			<link href="https://fonts.googleapis.com/css?family=Montserrat:700&display=swap" rel="stylesheet">
+			<script src="travel_recommendation.js"></script>
+			<style>
+				body {
+					margin: 0;
+					font-family: 'Montserrat', Arial, sans-serif;
+					background: #000;
+				}
+				.navbar {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					background: linear-gradient(90deg, #233a36 60%, #233a36cc 100%);
+					padding: 12px 32px;
+					color: #fff;
+				}
+				.navbar-left {
+					display: flex;
+					align-items: center;
+					gap: 12px;
+				}
+				.navbar-logo {
+					width: 48px;
+					height: 48px;
+				}
+				.navbar-title {
+					font-size: 1.6rem;
+					font-weight: bold;
+					font-family: 'Montserrat', Arial, sans-serif;
+					font-style: italic;
+				}
+				.navbar-center {
+					display: flex;
+					gap: 32px;
+				}
+				.navbar-center a {
+					color: #fff;
+					text-decoration: none;
+					font-weight: bold;
+					font-size: 1.1rem;
+					transition: color 0.2s;
+				}
+				.navbar-center a:hover {
+					color: #00a19d;
+				}
+				.navbar-right {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+					background: #fff;
+					border-radius: 32px;
+					padding: 4px 12px 4px 16px;
+				}
+				#searchBar {
+					border: none;
+					outline: none;
+					padding: 8px 16px;
+					border-radius: 32px;
+					font-size: 1rem;
+					width: 220px;
+					color: #233a36;
+					background: transparent;
+				}
+				.search-icon {
+					width: 22px;
+					height: 22px;
+					margin-right: 8px;
+					color: #008080;
+				}
+				.navbar-btn {
+					background: #008080;
+					color: #fff;
+					border: none;
+					border-radius: 16px;
+					padding: 7px 18px;
+					font-size: 1rem;
+					font-weight: 600;
+					margin-left: 4px;
+					cursor: pointer;
+					transition: background 0.2s;
+				}
+				.navbar-btn:hover {
+					background: #005f5f;
+				}
+				.navbar-btn.clear {
+					background: #fff;
+					color: #008080;
+					border: 1px solid #008080;
+				}
+				.navbar-btn.clear:hover {
+					background: #e0f7fa;
+				}
+				
+				/* Page visibility styles */
+				.page {
+					display: none;
+				}
+				.page.active {
+					display: block;
+				}
+				
+				/* About page styles */
+				.about-bg {
+					position: relative;
+					min-height: 100vh;
+					background: url('assets/sitebg.avif') center center/cover no-repeat;
+					z-index: 1;
+				}
+				.about-overlay {
+					position: absolute;
+					top: 0; left: 0; right: 0; bottom: 0;
+					background: linear-gradient(90deg, #233a36cc 40%, #233a3600 100%);
+					display: flex;
+					flex-direction: row;
+					align-items: flex-start;
+					justify-content: flex-start;
+					padding-top: 80px;
+					z-index: 2;
+					min-height: 100vh;
+				}
+				.about-content {
+					margin-left: 64px;
+					margin-top: 32px;
+					max-width: 900px;
+				}
+				.about-title {
+					font-size: 3.2rem;
+					font-weight: bold;
+					color: #fff;
+					margin-bottom: 32px;
+					letter-spacing: 2px;
+				}
+				.about-desc {
+					font-size: 1.15rem;
+					color: #fff;
+					background: rgba(35,58,54,0.7);
+					border: 2px solid #fff;
+					border-radius: 8px;
+					padding: 22px 32px;
+					margin-bottom: 40px;
+					max-width: 800px;
+					display: inline-block;
+					line-height: 1.6;
+				}
+				.team-section {
+					margin-top: 32px;
+				}
+				.team-title {
+					font-size: 2.2rem;
+					font-weight: bold;
+					color: #fff;
+					margin-bottom: 24px;
+				}
+				.team-title span {
+					color: #fff;
+					font-weight: bold;
+				}
+				.team-members {
+					display: flex;
+					gap: 32px;
+					flex-wrap: wrap;
+				}
+				.team-card {
+					background: rgba(35,58,54,0.8);
+					border-radius: 16px;
+					border: 2px solid #fff;
+					padding: 24px 32px;
+					min-width: 200px;
+					max-width: 220px;
+					color: #fff;
+					text-align: center;
+					box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+					transition: transform 0.2s;
+				}
+				.team-card:hover {
+					transform: translateY(-4px);
+				}
+				.team-avatar {
+					width: 64px;
+					height: 64px;
+					background: #008080;
+					color: #fff;
+					border-radius: 50%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 1.8rem;
+					font-weight: bold;
+					margin: 0 auto 16px auto;
+					border: 3px solid #fff;
+				}
+				.team-name {
+					font-size: 1.2rem;
+					font-weight: bold;
+					margin-bottom: 8px;
+				}
+				.team-role {
+					background: #3b5c8a;
+					color: #fff;
+					border-radius: 20px;
+					padding: 8px 20px;
+					font-size: 0.95rem;
+					font-weight: 600;
+					margin-top: 12px;
+					display: inline-block;
+				}
+				.team-info {
+					font-size: 0.9rem;
+					color: #e0e0e0;
+					margin: 8px 0;
+					font-style: italic;
+				}
+				
+				/* Contact page styles */
+				.contact-bg {
+					position: relative;
+					min-height: 100vh;
+					background: url('assets/sitebg.avif') center center/cover no-repeat;
+					z-index: 1;
+				}
+				.contact-overlay {
+					position: absolute;
+					top: 0; left: 0; right: 0; bottom: 0;
+					background: linear-gradient(90deg, #233a36cc 40%, #233a3600 100%);
+					display: flex;
+					flex-direction: row;
+					align-items: flex-start;
+					justify-content: flex-start;
+					padding-top: 80px;
+					z-index: 2;
+					min-height: 100vh;
+				}
+				.contact-content {
+					margin-left: 64px;
+					margin-top: 32px;
+					max-width: 800px;
+				}
+				.contact-title {
+					font-size: 3.2rem;
+					font-weight: bold;
+					color: #fff;
+					margin-bottom: 16px;
+					letter-spacing: 2px;
+				}
+				.contact-subtitle {
+					font-size: 1.3rem;
+					color: #fff;
+					margin-bottom: 32px;
+					font-weight: 300;
+				}
+				.contact-form-container {
+					background: rgba(35,58,54,0.85);
+					border: 2px solid #fff;
+					border-radius: 12px;
+					padding: 32px;
+					max-width: 500px;
+					box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+				}
+				.contact-form {
+					display: flex;
+					flex-direction: column;
+					gap: 20px;
+				}
+				.form-group {
+					display: flex;
+					flex-direction: column;
+				}
+				.contact-form input,
+				.contact-form textarea {
+					background: #fff;
+					border: 1px solid #ddd;
+					border-radius: 8px;
+					padding: 12px 16px;
+					font-size: 1rem;
+					font-family: 'Montserrat', Arial, sans-serif;
+					color: #333;
+					transition: border-color 0.2s, box-shadow 0.2s;
+				}
+				.contact-form input:focus,
+				.contact-form textarea:focus {
+					outline: none;
+					border-color: #008080;
+					box-shadow: 0 0 0 3px rgba(0,128,128,0.1);
+				}
+				.contact-form input.error,
+				.contact-form textarea.error {
+					border-color: #ff4757;
+					box-shadow: 0 0 0 3px rgba(255,71,87,0.1);
+				}
+				.contact-form textarea {
+					resize: vertical;
+					min-height: 120px;
+				}
+				.submit-btn {
+					background: #008080;
+					color: #fff;
+					border: none;
+					border-radius: 8px;
+					padding: 14px 32px;
+					font-size: 1.1rem;
+					font-weight: bold;
+					cursor: pointer;
+					transition: background 0.2s, transform 0.2s;
+					align-self: flex-end;
+					min-width: 120px;
+				}
+				.submit-btn:hover {
+					background: #005f5f;
+					transform: translateY(-2px);
+				}
+				.submit-btn:active {
+					transform: translateY(0);
+				}
+				.error-message {
+					color: #ff4757;
+					font-size: 0.85rem;
+					margin-top: 4px;
+					display: none;
+				}
+				.error-message.show {
+					display: block;
+				}
+				
+				/* Modal styles */
+				.modal {
+					display: none;
+					position: fixed;
+					z-index: 1000;
+					left: 0;
+					top: 0;
+					width: 100%;
+					height: 100%;
+					background-color: rgba(0,0,0,0.6);
+					backdrop-filter: blur(4px);
+				}
+				.modal-content {
+					background-color: #fff;
+					margin: 15% auto;
+					padding: 24px;
+					border-radius: 12px;
+					width: 90%;
+					max-width: 400px;
+					text-align: center;
+					box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+					position: relative;
+				}
+				.close-modal {
+					color: #aaa;
+					float: right;
+					font-size: 28px;
+					font-weight: bold;
+					position: absolute;
+					right: 16px;
+					top: 12px;
+					cursor: pointer;
+				}
+				.close-modal:hover {
+					color: #000;
+				}
+				.modal-content h2 {
+					color: #008080;
+					margin-bottom: 16px;
+					font-size: 1.8rem;
+				}
+				.modal-content p {
+					color: #555;
+					font-size: 1.1rem;
+					line-height: 1.5;
+				}
+				
+				/* Search Results Styles */
+				.search-results {
+					display: none;
+					position: fixed;
+					top: 0;
+					right: 0;
+					width: 40%;
+					height: 100vh;
+					background: rgba(35, 58, 54, 0.95);
+					backdrop-filter: blur(10px);
+					border-left: 2px solid #008080;
+					z-index: 100;
+					overflow-y: auto;
+					padding: 100px 20px 20px 20px;
+					box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+				}
+				.search-results.show {
+					display: block;
+				}
+				
+				/* Close button for search results */
+				.close-results {
+					position: absolute;
+					top: 20px;
+					right: 20px;
+					background: #008080;
+					color: #fff;
+					border: none;
+					border-radius: 50%;
+					width: 40px;
+					height: 40px;
+					font-size: 1.2rem;
+					cursor: pointer;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					transition: background 0.2s;
+					z-index: 101;
+				}
+				.close-results:hover {
+					background: #005f5f;
+				}
+				
+				/* Main content adjustment when search is active */
+				.main-content {
+					transition: margin-right 0.3s ease;
+				}
+				.main-content.search-active {
+					margin-right: 40%;
+				}
+				.results-grid {
+					display: grid;
+					grid-template-columns: 1fr;
+					gap: 16px;
+					margin-top: 20px;
+				}
+				.result-card {
+					background: rgba(255,255,255,0.95);
+					border-radius: 12px;
+					overflow: hidden;
+					box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+					transition: transform 0.3s, box-shadow 0.3s;
+					margin-bottom: 12px;
+				}
+				.result-card:hover {
+					transform: translateY(-4px);
+					box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+				}
+				.result-image {
+					position: relative;
+					height: 120px;
+					overflow: hidden;
+				}
+				.result-image img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					transition: transform 0.3s;
+				}
+				.result-card:hover .result-image img {
+					transform: scale(1.05);
+				}
+				.result-type {
+					position: absolute;
+					top: 12px;
+					right: 12px;
+					background: #008080;
+					color: #fff;
+					padding: 4px 12px;
+					border-radius: 20px;
+					font-size: 0.85rem;
+					font-weight: 600;
+					text-transform: capitalize;
+				}
+				.result-content {
+					padding: 12px;
+				}
+				.result-title {
+					font-size: 1.1rem;
+					font-weight: bold;
+					color: #233a36;
+					margin-bottom: 8px;
+					line-height: 1.2;
+				}
+				.result-description {
+					color: #555;
+					font-size: 0.85rem;
+					line-height: 1.4;
+					margin-bottom: 10px;
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+				}
+				.result-country {
+					color: #008080;
+					font-size: 0.8rem;
+					font-weight: 600;
+					margin-bottom: 8px;
+				}
+				.result-time {
+					color: #2563eb;
+					font-size: 0.75em;
+					margin: 6px 0;
+					padding: 3px 6px;
+					background: rgba(37, 99, 235, 0.1);
+					border-radius: 10px;
+					display: inline-block;
+					font-weight: 500;
+				}
+				.visit-btn {
+					background: #008080;
+					color: #fff;
+					border: none;
+					border-radius: 6px;
+					padding: 8px 16px;
+					font-size: 0.9rem;
+					font-weight: 600;
+					cursor: pointer;
+					transition: background 0.2s, transform 0.2s;
+					width: 100%;
+				}
+				.visit-btn:hover {
+					background: #005f5f;
+					transform: translateY(-2px);
+				}
+				.no-results {
+					text-align: center;
+					padding: 20px 15px;
+					background: rgba(35,58,54,0.8);
+					border-radius: 12px;
+					border: 2px solid #fff;
+					margin: 0 auto;
+				}
+				.no-results h2 {
+					color: #fff;
+					font-size: 1.4rem;
+					margin-bottom: 12px;
+				}
+				.no-results p {
+					color: #e0e0e0;
+					font-size: 0.9rem;
+					line-height: 1.4;
+				}
+			</style>
+	</head>
+	<body>
+		<div class="main-content">
+			<!-- Navbar -->
+			<nav class="navbar">
+				<div class="navbar-left">
+					<!-- Airplane SVG icon -->
+					<svg class="navbar-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M44 6L4 22L22 26L26 44L32 34L44 6Z" fill="#fff" stroke="#233a36" stroke-width="2"/>
+					</svg>
+					<span class="navbar-title">TravelBloom</span>
+				</div>
+				<div class="navbar-center">
+					<a href="#" onclick="showPage('home')">Home</a>
+					<a href="#" onclick="showPage('about')">About Us</a>
+					<a href="#" onclick="showPage('contact')">Contact Us</a>
+				</div>
+				<div class="navbar-right">
+					<input type="text" id="searchBar" placeholder="Enter a destination or keyword" />
+					<!-- Search icon SVG -->
+					<svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<circle cx="11" cy="11" r="7" stroke="#008080" stroke-width="2"/>
+						<line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#008080" stroke-width="2" stroke-linecap="round"/>
+					</svg>
+					<button id="searchBtn" class="navbar-btn">Search</button>
+					<button id="resetBtn" class="navbar-btn clear">Clear</button>
+				</div>
+			</nav>
+			
+			<!-- Home Page -->
+			<div id="home" class="page active">
+				<div class="home-bg">
+					<div class="home-overlay">
+						<div class="home-social">
+							<a href="#" title="Twitter" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.88-2.37c-.83.5-1.75.87-2.72 1.07A4.28 4.28 0 0 0 12 8.5c0 .34.04.67.1.99C8.09 9.36 4.8 7.6 2.67 4.9c-.37.64-.58 1.38-.58 2.17 0 1.5.77 2.82 1.94 3.6-.72-.02-1.4-.22-1.99-.55v.06c0 2.1 1.49 3.85 3.47 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.1 2.94 3.95 2.97A8.6 8.6 0 0 1 2 19.54c-.34 0-.67-.02-1-.06A12.13 12.13 0 0 0 7.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59c-.77.34-1.6.58-2.47.7z" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="Facebook" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.6 0 0 .6 0 1.326v21.348C0 23.4.6 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.92.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.674V1.326C24 .6 23.4 0 22.675 0" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="Instagram" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.974 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.974-1.246-2.242-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608C4.516 2.497 5.784 2.226 7.15 2.163 8.416 2.105 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.771.131 4.659.392 3.678 1.373c-.98.98-1.242 2.093-1.301 3.374C2.013 5.668 2 6.077 2 12c0 5.923.013 6.332.072 7.613.059 1.281.321 2.394 1.301 3.374.981.981 2.093 1.242 3.374 1.301C8.332 23.987 8.741 24 12 24s3.668-.013 4.948-.072c1.281-.059 2.394-.321 3.374-1.301.981-.98 1.242-2.093 1.301-3.374.059-1.281.072-1.69.072-7.613 0-5.923-.013-6.332-.072-7.613-.059-1.281-.321-2.394-1.301-3.374-.98-.981-2.093-1.242-3.374-1.301C15.668.013 15.259 0 12 0zm0 5.838A6.162 6.162 0 0 0 5.838 12 6.162 6.162 0 0 0 12 18.162 6.162 6.162 0 0 0 18.162 12 6.162 6.162 0 0 0 12 5.838zm0 10.162A4 4 0 1 1 12 8a4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="YouTube" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M23.498 6.186a2.994 2.994 0 0 0-2.112-2.112C19.36 3.5 12 3.5 12 3.5s-7.36 0-9.386.574A2.994 2.994 0 0 0 .502 6.186C0 8.212 0 12 0 12s0 3.788.502 5.814a2.994 2.994 0 0 0 2.112 2.112C4.64 20.5 12 20.5 12 20.5s7.36 0 9.386-.574a2.994 2.994 0 0 0 2.112-2.112C24 15.788 24 12 24 12s0-3.788-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="#fff"/></svg>
+							</a>
+						</div>
+						<div class="home-content">
+							<h1 class="home-title">EXPLORE<br/>DREAM<br/>DESTINATION</h1>
+							<div class="home-desc">
+								It encourages exploration of unfamiliar territories, embracing diverse cultures and landscapes, while pursuing the desired destination that captivates the heart and ignites a sense of wonder.
+							</div>
+							<button class="home-btn">BOOK NOW</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- About Page -->
+			<div id="about" class="page">
+				<div class="about-bg">
+					<div class="about-overlay">
+						<div class="home-social">
+							<a href="#" title="Twitter" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.88-2.37c-.83.5-1.75.87-2.72 1.07A4.28 4.28 0 0 0 12 8.5c0 .34.04.67.1.99C8.09 9.36 4.8 7.6 2.67 4.9c-.37.64-.58 1.38-.58 2.17 0 1.5.77 2.82 1.94 3.6-.72-.02-1.4-.22-1.99-.55v.06c0 2.1 1.49 3.85 3.47 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.1 2.94 3.95 2.97A8.6 8.6 0 0 1 2 19.54c-.34 0-.67-.02-1-.06A12.13 12.13 0 0 0 7.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59c-.77.34-1.6.58-2.47.7z" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="Facebook" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.6 0 0 .6 0 1.326v21.348C0 23.4.6 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.92.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.674V1.326C24 .6 23.4 0 22.675 0" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="Instagram" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.974 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.974-1.246-2.242-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608C4.516 2.497 5.784 2.226 7.15 2.163 8.416 2.105 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.771.131 4.659.392 3.678 1.373c-.98.98-1.242 2.093-1.301 3.374C2.013 5.668 2 6.077 2 12c0 5.923.013 6.332.072 7.613.059 1.281.321 2.394 1.301 3.374.981.981 2.093 1.242 3.374 1.301C8.332 23.987 8.741 24 12 24s3.668-.013 4.948-.072c1.281-.059 2.394-.321 3.374-1.301.981-.98 1.242-2.093 1.301-3.374.059-1.281.072-1.69.072-7.613 0-5.923-.013-6.332-.072-7.613-.059-1.281-.321-2.394-1.301-3.374-.98-.981-2.093-1.242-3.374-1.301C15.668.013 15.259 0 12 0zm0 5.838A6.162 6.162 0 0 0 5.838 12 6.162 6.162 0 0 0 12 18.162 6.162 6.162 0 0 0 18.162 12 6.162 6.162 0 0 0 12 5.838zm0 10.162A4 4 0 1 1 12 8a4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="YouTube" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M23.498 6.186a2.994 2.994 0 0 0-2.112-2.112C19.36 3.5 12 3.5 12 3.5s-7.36 0-9.386.574A2.994 2.994 0 0 0 .502 6.186C0 8.212 0 12 0 12s0 3.788.502 5.814a2.994 2.994 0 0 0 2.112 2.112C4.64 20.5 12 20.5 12 20.5s7.36 0 9.386-.574a2.994 2.994 0 0 0 2.112-2.112C24 15.788 24 12 24 12s0-3.788-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="#fff"/></svg>
+							</a>
+						</div>
+						<div class="about-content">
+							<h1 class="about-title">ABOUT US</h1>
+							<div class="about-desc">
+								Welcome to Our Company! We are a team of passionate individuals dedicated to providing excellent services/products to our customers. Our mission is to <b>provide the best experience</b> for people traveling to different destinations around the world.<br><br>
+								Our values include integrity, innovation, customer satisfaction, and teamwork. We believe in <b>putting our customers first</b> and <b>working together</b> to achieve our goals.<br>
+								Feel free to explore our website to learn more about what we offer!
+							</div>
+							<div class="team-section">
+								<h2 class="team-title">Our <span>Team</span></h2>
+								<div class="team-members">
+									<div class="team-card">
+										<div class="team-avatar">JD</div>
+										<div class="team-name">John Doe</div>
+										<div class="team-info">John is responsible for...</div>
+										<div class="team-role">CEO</div>
+									</div>
+									<div class="team-card">
+										<div class="team-avatar">CT</div>
+										<div class="team-name">Celina Thomas</div>
+										<div class="team-info">Celina Thomas is responsible for...</div>
+										<div class="team-role">Team Lead</div>
+									</div>
+									<div class="team-card">
+										<div class="team-avatar">MT</div>
+										<div class="team-name">Mike Tysen</div>
+										<div class="team-info">Mike Tysen is responsible for...</div>
+										<div class="team-role">Delivery Head</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Contact Page (placeholder) -->
+			<div id="contact" class="page">
+				<div class="contact-bg">
+					<div class="contact-overlay">
+						<div class="home-social">
+							<a href="#" title="Twitter" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.59-2.47.7a4.3 4.3 0 0 0 1.88-2.37c-.83.5-1.75.87-2.72 1.07A4.28 4.28 0 0 0 12 8.5c0 .34.04.67.1.99C8.09 9.36 4.8 7.6 2.67 4.9c-.37.64-.58 1.38-.58 2.17 0 1.5.77 2.82 1.94 3.6-.72-.02-1.4-.22-1.99-.55v.06c0 2.1 1.49 3.85 3.47 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.1 2.94 3.95 2.97A8.6 8.6 0 0 1 2 19.54c-.34 0-.67-.02-1-.06A12.13 12.13 0 0 0 7.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59c-.77.34-1.6.58-2.47.7z" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="Facebook" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.6 0 0 .6 0 1.326v21.348C0 23.4.6 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.92.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.4 24 24 23.4 24 22.674V1.326C24 .6 23.4 0 22.675 0" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="Instagram" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.974 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.974-1.246-2.242-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608C4.516 2.497 5.784 2.226 7.15 2.163 8.416 2.105 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.771.131 4.659.392 3.678 1.373c-.98.98-1.242 2.093-1.301 3.374C2.013 5.668 2 6.077 2 12c0 5.923.013 6.332.072 7.613.059 1.281.321 2.394 1.301 3.374.981.981 2.093 1.242 3.374 1.301C8.332 23.987 8.741 24 12 24s3.668-.013 4.948-.072c1.281-.059 2.394-.321 3.374-1.301.981-.98 1.242-2.093 1.301-3.374.059-1.281.072-1.69.072-7.613 0-5.923-.013-6.332-.072-7.613-.059-1.281-.321-2.394-1.301-3.374-.98-.981-2.093-1.242-3.374-1.301C15.668.013 15.259 0 12 0zm0 5.838A6.162 6.162 0 0 0 5.838 12 6.162 6.162 0 0 0 12 18.162 6.162 6.162 0 0 0 18.162 12 6.162 6.162 0 0 0 12 5.838zm0 10.162A4 4 0 1 1 12 8a4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0z" fill="#fff"/></svg>
+							</a>
+							<a href="#" title="YouTube" class="social-icon">
+								<svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M23.498 6.186a2.994 2.994 0 0 0-2.112-2.112C19.36 3.5 12 3.5 12 3.5s-7.36 0-9.386.574A2.994 2.994 0 0 0 .502 6.186C0 8.212 0 12 0 12s0 3.788.502 5.814a2.994 2.994 0 0 0 2.112 2.112C4.64 20.5 12 20.5 12 20.5s7.36 0 9.386-.574a2.994 2.994 0 0 0 2.112-2.112C24 15.788 24 12 24 12s0-3.788-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="#fff"/></svg>
+							</a>
+						</div>
+						<div class="contact-content">
+							<h1 class="contact-title">CONTACT US</h1>
+							<div class="contact-subtitle">Get in touch</div>
+							<div class="contact-form-container">
+								<form id="contactForm" class="contact-form">
+									<div class="form-group">
+										<input type="text" id="contactName" name="name" placeholder="Name" required>
+										<span class="error-message" id="nameError"></span>
+									</div>
+									<div class="form-group">
+										<input type="email" id="contactEmail" name="email" placeholder="Email" required>
+										<span class="error-message" id="emailError"></span>
+									</div>
+									<div class="form-group">
+										<textarea id="contactMessage" name="message" placeholder="Your Message" rows="6" required></textarea>
+										<span class="error-message" id="messageError"></span>
+									</div>
+									<button type="submit" class="submit-btn">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Modal for form submission -->
+			<div id="submitModal" class="modal">
+				<div class="modal-content">
+					<span class="close-modal">&times;</span>
+					<h2>Thank You!</h2>
+					<p>Your message has been submitted successfully. We'll get back to you soon!</p>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Search Results Panel -->
+		<div id="searchResults" class="search-results"></div>
+		<style>
+			/* ...existing styles... */
+			.home-bg {
+				position: relative;
+				min-height: 100vh;
+				background: url('assets/sitebg.avif') center center/cover no-repeat;
+				z-index: 1;
+			}
+			.home-overlay {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: linear-gradient(90deg, #233a36cc 40%, #233a3600 100%);
+				display: flex;
+				flex-direction: row;
+				align-items: flex-start;
+				justify-content: flex-start;
+				padding-top: 80px;
+				z-index: 2;
+				min-height: 100vh;
+			}
+			.home-social {
+				display: flex;
+				flex-direction: column;
+				gap: 32px;
+				margin-left: 32px;
+				margin-top: 32px;
+			}
+			.social-icon {
+				display: block;
+				transition: transform 0.2s;
+			}
+			.social-icon:hover {
+				transform: scale(1.15);
+			}
+			.home-content {
+				margin-left: 64px;
+				margin-top: 32px;
+				max-width: 600px;
+			}
+			.home-title {
+				font-size: 3.5rem;
+				font-weight: bold;
+				color: #fff;
+				line-height: 1.1;
+				letter-spacing: 2px;
+				margin-bottom: 32px;
+				border: 4px solid #fff;
+				padding: 16px 32px;
+				display: inline-block;
+				background: rgba(35,58,54,0.5);
+			}
+			.home-desc {
+				font-size: 1.1rem;
+				color: #fff;
+				background: rgba(35,58,54,0.7);
+				border: 2px solid #fff;
+				border-radius: 8px;
+				padding: 18px 24px;
+				margin-bottom: 32px;
+				max-width: 420px;
+				display: inline-block;
+			}
+			.home-btn {
+				background: #008080;
+				color: #fff;
+				border: none;
+				border-radius: 24px;
+				padding: 16px 40px;
+				font-size: 1.2rem;
+				font-weight: bold;
+				cursor: pointer;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+				transition: background 0.2s;
+			}
+			.home-btn:hover {
+				background: #005f5f;
+			}
+		</style>
+	</body>
+</html>
