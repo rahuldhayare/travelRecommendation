@@ -46,6 +46,17 @@
 				.navbar-center a:hover {
 					color: #00a19d;
 				}
+				.navbar-center .back-to-welcome {
+					background: rgba(0, 128, 128, 0.2);
+					border: 1px solid #008080;
+					border-radius: 20px;
+					padding: 8px 16px;
+					transition: all 0.3s ease;
+				}
+				.navbar-center .back-to-welcome:hover {
+					background: rgba(0, 128, 128, 0.3);
+					transform: translateX(-2px);
+				}
 				.navbar-right {
 					display: flex;
 					align-items: center;
@@ -549,6 +560,7 @@
 					<span class="navbar-title">TravelBloom</span>
 				</div>
 				<div class="navbar-center">
+					<a href="index.html" class="back-to-welcome">← Welcome</a>
 					<a href="#" onclick="showPage('home')">Home</a>
 					<a href="#" onclick="showPage('about')">About Us</a>
 					<a href="#" onclick="showPage('contact')">Contact Us</a>
